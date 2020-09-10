@@ -34,3 +34,5 @@ decls
 examples
 # /*.js
 !/index.js
+
+.idea/
