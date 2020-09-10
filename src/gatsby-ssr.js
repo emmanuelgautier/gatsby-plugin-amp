@@ -23,6 +23,7 @@ export const onPreRenderHTML = (
   },
   {
     analytics,
+    stories,
     canonicalBaseUrl,
     components = [],
     includedPaths = [],
@@ -77,6 +78,15 @@ export const onPreRenderHTML = (
           async
           custom-element="amp-analytics"
           src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"
+        />
+      ) : (
+        <Fragment />
+      ),
+      stories !== undefined ? (
+        <script
+          async
+          custom-element="amp-story"
+          src="https://cdn.ampproject.org/v0/amp-story-1.0.js"
         />
       ) : (
         <Fragment />
