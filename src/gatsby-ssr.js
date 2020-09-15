@@ -329,6 +329,14 @@ export const replaceRenderer = (
         </Fragment>
       ))
     );
-    replaceBodyHTMLString(document.body.children[0].outerHTML);
+
+    function getBodyParentElement(body) {
+      if (body.children[0].tagName === 'div') {
+        return getBodyParentElement(body.children[0]);
+      }
+      return body.children[0];
+    }
+
+    replaceBodyHTMLString(getBodyParentElement(document.body).outerHTML);
   }
 };
