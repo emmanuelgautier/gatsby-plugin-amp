@@ -330,13 +330,16 @@ export const replaceRenderer = (
       ))
     );
 
-    function getBodyParentElement(body) {
-      if (body.children[0].tagName === 'div') {
-        return getBodyParentElement(body.children[0]);
+    function getNonDivParentElement(element) {
+      const childElement = element.children[0];
+
+      if (childElement.tagName.toLowerCase() === 'div') {
+        return getNonDivParentElement(childElement);
       }
-      return body.children[0];
+
+      return childElement;
     }
 
-    replaceBodyHTMLString(getBodyParentElement(document.body).outerHTML);
+    replaceBodyHTMLString(getNonDivParentElement(document.body).outerHTML);
   }
 };

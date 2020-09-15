@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-amp-alternative",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "description": "A gatsby plugin for scaffolding AMP pages",
   "main": "index.js",
   "scripts": {
