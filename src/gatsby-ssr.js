@@ -149,6 +149,7 @@ export const onRenderBody = (
     setHtmlAttributes({ amp: "" });
     setHeadComponents([
       <link
+        id="amp-canonical-url"
         rel="canonical"
         href={interpolate(relCanonicalPattern, {
           canonicalBaseUrl,
