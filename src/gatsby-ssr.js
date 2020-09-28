@@ -275,6 +275,16 @@ export const replaceRenderer = (
       iframe.parentNode.replaceChild(ampIframe, iframe);
     });
 
+    const linkCssTags = [].slice.call(document.getElementsByTagName("link"));
+    linkCssTags.forEach((tag) => {
+      if (
+        tag.getAttribute("rel") === "stylesheet" &&
+        tag.getAttribute("data-react-helmet") != null
+      ) {
+        tag.setAttribute("amp-custom", "");
+      }
+    });
+
     const styleTags = [].slice.call(document.getElementsByTagName("style"));
     styleTags.forEach((styleTag) => {
       if (
