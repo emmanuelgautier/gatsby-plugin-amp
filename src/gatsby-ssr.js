@@ -60,7 +60,7 @@ export const onPreRenderHTML = (
           dangerouslySetInnerHTML={{ __html: ampNoscriptBoilerplate }}
         />
       </noscript>,
-      <style amp-custom="" dangerouslySetInnerHTML={{ __html: styles }} />,
+      <style dangerouslySetInnerHTML={{ __html: styles }} />,
       ...components.map((component, i) => (
         <script
           key={`custom-element-${i}`}
@@ -275,23 +275,13 @@ export const replaceRenderer = (
       iframe.parentNode.replaceChild(ampIframe, iframe);
     });
 
-    const linkCssTags = [].slice.call(document.getElementsByTagName("link"));
-    linkCssTags.forEach((tag) => {
+    const linkTags = [].slice.call(document.getElementsByTagName("link"));
+    linkTags.forEach((tag) => {
       if (
         tag.getAttribute("rel") === "stylesheet" &&
         tag.getAttribute("data-react-helmet") != null
       ) {
         tag.setAttribute("amp-custom", "");
-      }
-    });
-
-    const styleTags = [].slice.call(document.getElementsByTagName("style"));
-    styleTags.forEach((styleTag) => {
-      if (
-        styleTag.getAttribute("data-emotion-css") != null ||
-        styleTag.getAttribute("data-react-helmet") != null
-      ) {
-        styleTag.setAttribute("amp-custom", "");
       }
     });
 
