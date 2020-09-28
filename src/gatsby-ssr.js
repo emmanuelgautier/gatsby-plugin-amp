@@ -318,12 +318,16 @@ export const replaceRenderer = (
       });
       iframe.parentNode.replaceChild(ampIframe, iframe);
     });
+
     const styleTags = [].slice.call(document.getElementsByTagName("style"));
     styleTags.forEach(styleTag => {
       if (styleTag.getAttribute('data-emotion-css') != null) {
           styleTag.setAttribute('amp-custom', "");
       }
     })
+
+          const iframes = [].slice.call(document.getElementsByTagName("iframe"));
+
     setHeadComponents(
       Array.from(new Set(headComponents)).map((component, i) => (
         <Fragment key={`head-components-${i}`}>
