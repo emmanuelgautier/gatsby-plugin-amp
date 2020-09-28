@@ -60,7 +60,7 @@ export const onPreRenderHTML = (
           dangerouslySetInnerHTML={{ __html: ampNoscriptBoilerplate }}
         />
       </noscript>,
-      <style dangerouslySetInnerHTML={{ __html: styles }} />,
+      <style amp-custom="" dangerouslySetInnerHTML={{ __html: styles }} />,
       ...components.map((component, i) => (
         <script
           key={`custom-element-${i}`}
