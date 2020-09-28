@@ -322,7 +322,10 @@ export const replaceRenderer = (
 
     const styleTags = [].slice.call(document.getElementsByTagName("style"));
     styleTags.forEach((styleTag) => {
-      if (styleTag.getAttribute("data-emotion-css") != null) {
+      if (
+        styleTag.getAttribute("data-emotion-css") != null ||
+        styleTag.getAttribute("data-react-helmet") != null
+      ) {
         styleTag.setAttribute("amp-custom", "");
       }
     });
