@@ -9,7 +9,7 @@ const ampBoilerplate = `body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 n
 const ampNoscriptBoilerplate = `body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}`;
 
 const interpolate = (str, map) =>
-  str.replace(/{{\s*[\w\.]+\s*}}/g, match => map[match.replace(/[{}]/g, "")]);
+  str.replace(/{{\s*[\w\.]+\s*}}/g, (match) => map[match.replace(/[{}]/g, "")]);
 
 export const onPreRenderHTML = (
   {
@@ -19,7 +19,7 @@ export const onPreRenderHTML = (
     replacePreBodyComponents,
     getPostBodyComponents,
     replacePostBodyComponents,
-    pathname
+    pathname,
   },
   {
     analytics,
@@ -29,7 +29,7 @@ export const onPreRenderHTML = (
     includedPaths = [],
     excludedPaths = [],
     pathIdentifier = "/amp/",
-    relAmpHtmlPattern = "{{canonicalBaseUrl}}{{pathname}}{{pathIdentifier}}"
+    relAmpHtmlPattern = "{{canonicalBaseUrl}}{{pathname}}{{pathIdentifier}}",
   }
 ) => {
   const headComponents = flattenDeep(getHeadComponents());
@@ -92,7 +92,7 @@ export const onPreRenderHTML = (
         <Fragment />
       ),
       ...headComponents.filter(
-        x =>
+        (x) =>
           x.type !== "style" &&
           (x.type !== "script" || x.props.type === "application/ld+json") &&
           x.key !== "TypographyStyle" &&
@@ -101,22 +101,22 @@ export const onPreRenderHTML = (
             x.props.rel === "preload" &&
             (x.props.as === "script" || x.props.as === "fetch")
           )
-      )
+      ),
     ]);
     replacePreBodyComponents([
-      ...preBodyComponents.filter(x => x.key !== "plugin-google-tagmanager")
+      ...preBodyComponents.filter((x) => x.key !== "plugin-google-tagmanager"),
     ]);
     replacePostBodyComponents(
-      postBodyComponents.filter(x => x.type !== "script")
+      postBodyComponents.filter((x) => x.type !== "script")
     );
   } else if (
     (excludedPaths.length > 0 &&
       pathname &&
-      excludedPaths.findIndex(_path => new Minimatch(pathname).match(_path)) <
+      excludedPaths.findIndex((_path) => new Minimatch(pathname).match(_path)) <
         0) ||
     (includedPaths.length > 0 &&
       pathname &&
-      includedPaths.findIndex(_path => minimatch(pathname, _path)) > -1) ||
+      includedPaths.findIndex((_path) => minimatch(pathname, _path)) > -1) ||
     (excludedPaths.length === 0 && includedPaths.length === 0)
   ) {
     replaceHeadComponents([
@@ -126,10 +126,10 @@ export const onPreRenderHTML = (
         href={interpolate(relAmpHtmlPattern, {
           canonicalBaseUrl,
           pathIdentifier,
-          pathname
+          pathname,
         }).replace(/([^:])(\/\/+)/g, "$1/")}
       />,
-      ...headComponents
+      ...headComponents,
     ]);
   }
 };
@@ -141,7 +141,7 @@ export const onRenderBody = (
     canonicalBaseUrl,
     pathIdentifier = "/amp/",
     relCanonicalPattern = "{{canonicalBaseUrl}}{{pathname}}",
-    useAmpClientIdApi = false
+    useAmpClientIdApi = false,
   }
 ) => {
   const isAmp = pathname && pathname.indexOf(pathIdentifier) > -1;
@@ -152,7 +152,7 @@ export const onRenderBody = (
         rel="canonical"
         href={interpolate(relCanonicalPattern, {
           canonicalBaseUrl,
-          pathname
+          pathname,
         })
           .replace(pathIdentifier, "")
           .replace(/([^:])(\/\/+)/g, "$1/")}
@@ -161,7 +161,7 @@ export const onRenderBody = (
         <meta name="amp-google-client-id-api" content="googleanalytics" />
       ) : (
         <Fragment />
-      )
+      ),
     ]);
     setPreBodyComponents([
       analytics != undefined ? (
@@ -179,15 +179,15 @@ export const onRenderBody = (
               type="application/json"
               dangerouslySetInnerHTML={{
                 __html: interpolate(JSON.stringify(analytics.config), {
-                  pathname
-                })
+                  pathname,
+                }),
               }}
             />
           )}
         </amp-analytics>
       ) : (
         <Fragment />
-      )
+      ),
     ]);
   }
 };
@@ -200,18 +200,18 @@ export const replaceRenderer = (
     image: {
       width: 640,
       height: 475,
-      layout: "responsive"
+      layout: "responsive",
     },
     twitter: {
       width: "390",
       height: "330",
-      layout: "responsive"
+      layout: "responsive",
     },
     iframe: {
       width: 640,
       height: 475,
-      layout: "responsive"
-    }
+      layout: "responsive",
+    },
   };
   const headComponents = [];
   const isAmp = pathname && pathname.indexOf(pathIdentifier) > -1;
@@ -222,7 +222,7 @@ export const replaceRenderer = (
 
     // convert images to amp-img or amp-anim
     const images = [].slice.call(document.getElementsByTagName("img"));
-    images.forEach(image => {
+    images.forEach((image) => {
       let ampImage;
       if (image.src && image.src.indexOf(".gif") > -1) {
         ampImage = document.createElement("amp-anim");
@@ -231,12 +231,12 @@ export const replaceRenderer = (
         ampImage = document.createElement("amp-img");
       }
       const attributes = Object.keys(image.attributes);
-      const includedAttributes = attributes.map(key => {
+      const includedAttributes = attributes.map((key) => {
         const attribute = image.attributes[key];
         ampImage.setAttribute(attribute.name, attribute.value);
         return attribute.name;
       });
-      Object.keys(defaults.image).forEach(key => {
+      Object.keys(defaults.image).forEach((key) => {
         if (includedAttributes && includedAttributes.indexOf(key) === -1) {
           ampImage.setAttribute(key, defaults.image[key]);
         }
@@ -248,16 +248,16 @@ export const replaceRenderer = (
     const twitterPosts = [].slice.call(
       document.getElementsByClassName("twitter-tweet")
     );
-    twitterPosts.forEach(post => {
+    twitterPosts.forEach((post) => {
       headComponents.push({ name: "amp-twitter", version: "0.1" });
       const ampTwitter = document.createElement("amp-twitter");
       const attributes = Object.keys(post.attributes);
-      const includedAttributes = attributes.map(key => {
+      const includedAttributes = attributes.map((key) => {
         const attribute = post.attributes[key];
         ampTwitter.setAttribute(attribute.name, attribute.value);
         return attribute.name;
       });
-      Object.keys(defaults.twitter).forEach(key => {
+      Object.keys(defaults.twitter).forEach((key) => {
         if (includedAttributes && includedAttributes.indexOf(key) === -1) {
           ampTwitter.setAttribute(key, defaults.twitter[key]);
         }
@@ -277,7 +277,7 @@ export const replaceRenderer = (
 
     // convert iframes to amp-iframe or amp-youtube
     const iframes = [].slice.call(document.getElementsByTagName("iframe"));
-    iframes.forEach(iframe => {
+    iframes.forEach((iframe) => {
       let ampIframe;
       let attributes;
       if (iframe.src && iframe.src.indexOf("youtube.com/embed/") > -1) {
@@ -296,7 +296,7 @@ export const replaceRenderer = (
         ampIframe.appendChild(placeholder);
 
         const forbidden = ["allow", "allowfullscreen", "frameborder", "src"];
-        attributes = Object.keys(iframe.attributes).filter(key => {
+        attributes = Object.keys(iframe.attributes).filter((key) => {
           const attribute = iframe.attributes[key];
           return !forbidden.includes(attribute.name);
         });
@@ -306,12 +306,12 @@ export const replaceRenderer = (
         attributes = Object.keys(iframe.attributes);
       }
 
-      const includedAttributes = attributes.map(key => {
+      const includedAttributes = attributes.map((key) => {
         const attribute = iframe.attributes[key];
         ampIframe.setAttribute(attribute.name, attribute.value);
         return attribute.name;
       });
-      Object.keys(defaults.iframe).forEach(key => {
+      Object.keys(defaults.iframe).forEach((key) => {
         if (includedAttributes && includedAttributes.indexOf(key) === -1) {
           ampIframe.setAttribute(key, defaults.iframe[key]);
         }
@@ -320,13 +320,21 @@ export const replaceRenderer = (
     });
 
     const styleTags = [].slice.call(document.getElementsByTagName("style"));
-    styleTags.forEach(styleTag => {
-      if (styleTag.getAttribute('data-emotion-css') != null) {
-          styleTag.setAttribute('amp-custom', "");
+    styleTags.forEach((styleTag) => {
+      if (styleTag.getAttribute("data-emotion-css") != null) {
+        styleTag.setAttribute("amp-custom", "");
       }
-    })
+    });
 
-          const iframes = [].slice.call(document.getElementsByTagName("iframe"));
+    // remove rel="canonical" tags
+    const linkTags = [].slice.call(document.getElementsByTagName("link"));
+    linkTags
+      .filter(
+        (v) =>
+          v.getAttribute("rel") === "canonical" &&
+          v.getAttribute("id") !== "amp-canonical-url"
+      )
+      .forEach((node) => (node = null));
 
     setHeadComponents(
       Array.from(new Set(headComponents)).map((component, i) => (
@@ -343,7 +351,7 @@ export const replaceRenderer = (
     function getNonDivParentElement(element) {
       const childElement = element.children[0];
 
-      if (childElement.tagName.toLowerCase() === 'div') {
+      if (childElement.tagName.toLowerCase() === "div") {
         return getNonDivParentElement(childElement);
       }
 
