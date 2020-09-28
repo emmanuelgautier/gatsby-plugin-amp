@@ -109,61 +109,16 @@ export const onPreRenderHTML = (
     replacePostBodyComponents(
       postBodyComponents.filter((x) => x.type !== "script")
     );
-  } else if (
-    (excludedPaths.length > 0 &&
-      pathname &&
-      excludedPaths.findIndex((_path) => new Minimatch(pathname).match(_path)) <
-        0) ||
-    (includedPaths.length > 0 &&
-      pathname &&
-      includedPaths.findIndex((_path) => minimatch(pathname, _path)) > -1) ||
-    (excludedPaths.length === 0 && includedPaths.length === 0)
-  ) {
-    replaceHeadComponents([
-      <link
-        rel="amphtml"
-        key="gatsby-plugin-amp-amphtml-link"
-        href={interpolate(relAmpHtmlPattern, {
-          canonicalBaseUrl,
-          pathIdentifier,
-          pathname,
-        }).replace(/([^:])(\/\/+)/g, "$1/")}
-      />,
-      ...headComponents,
-    ]);
   }
 };
 
 export const onRenderBody = (
   { setHeadComponents, setHtmlAttributes, setPreBodyComponents, pathname },
-  {
-    analytics,
-    canonicalBaseUrl,
-    pathIdentifier = "/amp/",
-    relCanonicalPattern = "{{canonicalBaseUrl}}{{pathname}}",
-    useAmpClientIdApi = false,
-  }
+  { analytics, pathIdentifier = "/amp/" }
 ) => {
   const isAmp = pathname && pathname.indexOf(pathIdentifier) > -1;
   if (isAmp) {
     setHtmlAttributes({ amp: "" });
-    setHeadComponents([
-      <link
-        id="amp-canonical-url"
-        rel="canonical"
-        href={interpolate(relCanonicalPattern, {
-          canonicalBaseUrl,
-          pathname,
-        })
-          .replace(pathIdentifier, "")
-          .replace(/([^:])(\/\/+)/g, "$1/")}
-      />,
-      useAmpClientIdApi ? (
-        <meta name="amp-google-client-id-api" content="googleanalytics" />
-      ) : (
-        <Fragment />
-      ),
-    ]);
     setPreBodyComponents([
       analytics != undefined ? (
         <amp-analytics
@@ -329,16 +284,6 @@ export const replaceRenderer = (
         styleTag.setAttribute("amp-custom", "");
       }
     });
-
-    // remove rel="canonical" tags
-    const linkTags = [].slice.call(document.getElementsByTagName("link"));
-    linkTags
-      .filter(
-        (v) =>
-          v.getAttribute("rel") === "canonical" &&
-          v.getAttribute("id") !== "amp-canonical-url"
-      )
-      .forEach((node) => (node = null));
 
     setHeadComponents(
       Array.from(new Set(headComponents)).map((component, i) => (
