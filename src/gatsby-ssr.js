@@ -38,7 +38,7 @@ export const onPreRenderHTML = (
   const isAmp =
     pathname &&
     pathname.indexOf(pathIdentifier) > -1 &&
-    !excludedPaths.includes(pathIdentifier);
+    !excludedPaths.includes(pathname);
   if (isAmp) {
     const styles = headComponents.reduce((str, x) => {
       if (x.type === "style") {
@@ -122,7 +122,7 @@ export const onRenderBody = (
   const isAmp =
     pathname &&
     pathname.indexOf(pathIdentifier) > -1 &&
-    !excludedPaths.includes(pathIdentifier);
+    !excludedPaths.includes(pathname);
   if (isAmp) {
     setHtmlAttributes({ amp: "" });
     setPreBodyComponents([
@@ -179,7 +179,7 @@ export const replaceRenderer = (
   const isAmp =
     pathname &&
     pathname.indexOf(pathIdentifier) > -1 &&
-    !excludedPaths.includes(pathIdentifier);
+    !excludedPaths.includes(pathname);
   if (isAmp) {
     const bodyHTML = renderToString(bodyComponent);
     const dom = new JSDOM(bodyHTML);
