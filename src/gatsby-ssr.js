@@ -117,9 +117,12 @@ export const onPreRenderHTML = (
 
 export const onRenderBody = (
   { setHeadComponents, setHtmlAttributes, setPreBodyComponents, pathname },
-  { analytics, pathIdentifier = "/amp/" }
+  { analytics, pathIdentifier = "/amp/", excludedPaths = [] }
 ) => {
-  const isAmp = pathname && pathname.indexOf(pathIdentifier) > -1;
+  const isAmp =
+    pathname &&
+    pathname.indexOf(pathIdentifier) > -1 &&
+    !excludedPaths.includes(pathIdentifier);
   if (isAmp) {
     setHtmlAttributes({ amp: "" });
     setPreBodyComponents([
@@ -153,7 +156,7 @@ export const onRenderBody = (
 
 export const replaceRenderer = (
   { bodyComponent, replaceBodyHTMLString, setHeadComponents, pathname },
-  { pathIdentifier = "/amp/" }
+  { pathIdentifier = "/amp/", excludedPaths = [] }
 ) => {
   const defaults = {
     image: {
@@ -173,7 +176,10 @@ export const replaceRenderer = (
     },
   };
   const headComponents = [];
-  const isAmp = pathname && pathname.indexOf(pathIdentifier) > -1;
+  const isAmp =
+    pathname &&
+    pathname.indexOf(pathIdentifier) > -1 &&
+    !excludedPaths.includes(pathIdentifier);
   if (isAmp) {
     const bodyHTML = renderToString(bodyComponent);
     const dom = new JSDOM(bodyHTML);
