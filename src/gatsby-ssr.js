@@ -35,7 +35,10 @@ export const onPreRenderHTML = (
   const headComponents = flattenDeep(getHeadComponents());
   const preBodyComponents = getPreBodyComponents();
   const postBodyComponents = getPostBodyComponents();
-  const isAmp = pathname && pathname.indexOf(pathIdentifier) > -1;
+  const isAmp =
+    pathname &&
+    pathname.indexOf(pathIdentifier) > -1 &&
+    !excludedPaths.includes(pathIdentifier);
   if (isAmp) {
     const styles = headComponents.reduce((str, x) => {
       if (x.type === "style") {
