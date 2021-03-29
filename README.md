@@ -1,10 +1,10 @@
-# gatsby-plugin-amp
+# gatsby-plugin-amp-alternative
 
 Formats AMP-specific pages by removing javascript, combining styles and adding boilerplate. Read more about AMP (Accelerated Mobile Pages) [here](https://amp.dev/).
 
 ## Install
 
-`npm install --save gatsby-plugin-amp`
+`npm install --save gatsby-plugin-amp-alternative`
 
 ## How to use
 
@@ -74,7 +74,7 @@ Add the plugin to the plugins array in your `gatsby-config.js`
 
 ```javascript
 {
-  resolve: `gatsby-plugin-amp`,
+  resolve: `gatsby-plugin-amp-alternative`,
   options: {
     analytics: {
       type: 'gtag',
@@ -90,11 +90,9 @@ Add the plugin to the plugins array in your `gatsby-config.js`
         },
       },
     },
-    canonicalBaseUrl: 'http://www.example.com/',
     components: ['amp-form'],
     excludedPaths: ['/404*', '/'],
     pathIdentifier: '/amp/',
-    relAmpHtmlPattern: '{{canonicalBaseUrl}}{{pathname}}{{pathIdentifier}}',
     useAmpClientIdApi: true,
   },
 },
@@ -129,23 +127,14 @@ vars: {
 
 &nbsp;&nbsp;&nbsp;&nbsp; If you use a tag manager, your config would simply be a url like `https://www.googletagmanager.com/amp.json?id=GTM-1234567&amp;gtm.url=SOURCE_URL`. You can use double curly braces to interpolate the pathname into a configuration value e.g. `page_location: '{{pathname}}'`. See [here](https://www.ampproject.org/docs/reference/components/amp-analytics) to learn more about `amp-analytics` configurations.
 
-**canonicalBaseUrl** `{String}`
-The base URL for your site. This will be used to create a `rel="canonical"` link in your amp template and `rel="amphtml"` link in your base page.
-
 **components** `{Array<String | Object{name<String>, version<String>}>}`
 The components you will need for your AMP templates. Read more about the available components [here](https://www.ampproject.org/docs/reference/components).
 
 **excludedPaths**`{Array<String>}`
 By default, this plugin will create `rel="amphtml"` links in all pages. If there are pages you would like to not have those links, include them here. You may use glob patterns in your strings (e.g. `/admin/*`). *this may go away if a way can be found to programatically exclude pages based on whether or not they have an AMP equivalent. But for now, this will work*
 
-**includedPaths**`{Array<String>}`
-By default, this plugin will create `rel="amphtml"` links in all pages. If, you would instead like to whitelist pages, include them here. You may use glob patterns in your strings (e.g. `/blog/*`). *this may go away if a way can be found to programatically exclude pages based on whether or not they have an AMP equivalent. But for now, this will work*
-
 **pathIdentifier** `{String}`
 The url segment which identifies AMP pages. If your regular page is at `http://www.example.com/blog/my-awesome-post` and your AMP page is at `http://www.example.com/blog/my-awesome-post/amp/`, your pathIdentifier should be `/amp/`
-
-**relAmpHtmlPattern** `{String}`
-The url pattern for your `rel="amphtml"` links. If your AMP pages follow the pattern `http://www.example.com/my-awesome-post/amp/`, the value for this should be `{{canonicalBaseUrl}}{{pathname}}{{pathIdentifier}}`.
 
 **relCanonicalPattern** `{String}`
 The url pattern for your `rel="canonical"` links. The default value is `{{canonicalBaseUrl}}{{pathname}}`.
